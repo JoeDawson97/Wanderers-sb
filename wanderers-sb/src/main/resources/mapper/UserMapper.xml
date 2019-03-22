@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wanderers.wanderers.app.dao.UserMapper">
+    <!--查找-->
+    <select id="find" resultMap="com.wanderers.wanderers.sys.security.User">
+        SELECT
+        id,
+        user_name AS 'username',
+        password,
+        del_flag as 'del_flag'
+        FROM USER
+        <where>
+            <if test="username !=null and name !=''">
+                AND user_name = #{username}
+            </if>
+            <if test="password != null and password !=''">
+                AND password=#{password}
+            </if>
+        </where>
+        limit 1  /*限制搜出一个来*/
+    </select>
+
+    <!--插入-->
+    <insert id="insert">
+        INSERT INTO USER (
+        user_name,
+        password,
+        del_flag
+        )VALUES (
+        #{username},
+        #{password},
+        '0'
+        )
+    </insert>
+
+    <!--更新-->
+    <update id="update">
+        UPDATE USER SET
+        user_name = #{username},
+        password = #{password},
+        WHERE id = #{id}
+    </update>
+
+    <!--删除-->
+    <update id="delete" parameterType="java.lang.Long">
+        UPDATE USER SET
+        del_flag = '1'
+        WHERE id=#{id}
+    </update>
+</mapper>
